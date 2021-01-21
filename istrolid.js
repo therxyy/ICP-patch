@@ -13793,6 +13793,7 @@ General Game Objects live here
 
     MachineGun.prototype.damage = 4;
 
+
     MachineGun.prototype.hide = true;
 
     MachineGun.prototype.disable = true;

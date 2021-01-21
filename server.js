@@ -55,6 +55,15 @@ global.Server = function() {
             lastInfoTime = now();
         });
 
+        root.on('message', msg =>{
+            let data = JSON.parse(msg);
+            if(data[0] === 'message'){
+                onMessage(data[1]);
+
+            }
+
+        });
+
         root.on('close', () => {
             console.log("cannot connect to root, retrying");
             setTimeout(connectToRoot, 5000);
@@ -69,6 +78,7 @@ global.Server = function() {
                 root.send(JSON.stringify(data));
             }
         }
+
     };
 
     var sendInfo = () => {
@@ -170,7 +180,8 @@ function onMessage(data) {
                 case '!help':
                     sim.say("commands: info, help");
                     break;
-                case '!info':
+
+                    case '!info':
                     sim.say("therxyy's testing ground lolz")
                     break;
                     case '!reset':
