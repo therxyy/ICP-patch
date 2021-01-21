@@ -156,3 +156,37 @@ net.createServer(function (socket) {
     }).on('exit', () => socket.end());
     socket.on('error', () => {});
 }).listen(5001, "localhost");
+
+//commands
+function onMessage(data) {
+    let {text, name, channel} = data;
+        if(channel === config.name) {
+            let args = text.split(' ');
+
+            let command = args[0].toLowerCase();
+            args.splice(0,1);
+
+            switch (command){
+                case '!help':
+                    sim.say("commands: info, help");
+                    break;
+                case '!info':
+                    sim.say("therxyy's testing ground lolz")
+                    break;
+                    case '!reset':
+                        if(name==="therxyy" || "therxy" || "therx"){
+                            sim.say("server restarting... ")
+                            process.exit(1);
+                        }
+                        break;
+
+
+
+
+
+
+        }
+
+
+    }
+}
