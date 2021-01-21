@@ -1,6 +1,6 @@
 {
-    "name": "Server (Custom)",
+    "name": "notuwu therxyy",
     "port": 8080,
-    "addr": "localhost",
+    "addr": "icp-server.herokuapp.com/",
     "root_addr": "ws://198.199.109.223:88"
 }
