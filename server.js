@@ -106,7 +106,7 @@ global.Server = function() {
 
         let id = req.headers['sec-websocket-key'];
 
-        ws.on('message', msg => {
+        ws.on("message", msg => {
             let packet = new DataView(new Uint8Array(msg).buffer);
             let data = sim.zJson.loadDv(packet);
             //console.log(data);
@@ -170,23 +170,27 @@ net.createServer(function (socket) {
 //commands
 function onMessage(data) {
     let {text, name, channel} = data;
-        if(channel === config.name) {
-            let args = text.split(' ');
+    console.log("data");
 
-            let command = args[0].toLowerCase();
-            args.splice(0,1);
+    if (channel !== config.name) {
+        return;
+    }
+    let args = text.split(' ');
 
-            switch (command){
-                case '!help':
-                    sim.say("commands: info, help");
-                    break;
+    let command = args[0].toLowerCase();
+    args.splice(0,1);
 
-                    case '!info':
-                    sim.say("therxyy's testing ground lolz")
-                    break;
-                    case '!reset':
-                        if(name==="therxyy" || "therxy" || "therx"){
-                            sim.say("server restarting... ")
+    switch (command) {
+        case  "!help":
+            sim.say("commands: info, help");
+            break;
+
+            case '!info':
+                sim.say("therxyy's testing ground lolz")
+                break;
+                case '!reset':
+                    if(name==="therxyy" || "therxy" || "therx"){
+                        sim.say("server restarting... ")
                             process.exit(1);
                         }
                         break;
@@ -199,5 +203,5 @@ function onMessage(data) {
         }
 
 
-    }
+
 }
