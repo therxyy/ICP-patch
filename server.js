@@ -53,15 +53,14 @@ global.Server = function() {
             console.log("connected to root");
             sendInfo();
             lastInfoTime = now();
+            root.send(JSON.stringify(["registerBot"]));
         });
 
-        root.on('message', msg =>{
+        root.on("message", msg => {
             let data = JSON.parse(msg);
-            if(data[0] === 'message'){
+            if (data[0] === 'message') {
                 onMessage(data[1]);
-
             }
-
         });
 
         root.on('close', () => {
@@ -78,7 +77,6 @@ global.Server = function() {
                 root.send(JSON.stringify(data));
             }
         }
-
     };
 
     var sendInfo = () => {
@@ -104,9 +102,9 @@ global.Server = function() {
     wss.on('connection', (ws, req) => {
         console.log("connection from", req.connection.remoteAddress);
 
-        let id = req.headers['sec-websocket-key'];
+        let id = ws.id = req.headers['sec-websocket-key'];
 
-        ws.on("message", msg => {
+        ws.on('message', msg => {
             let packet = new DataView(new Uint8Array(msg).buffer);
             let data = sim.zJson.loadDv(packet);
             //console.log(data);
@@ -167,10 +165,8 @@ net.createServer(function (socket) {
     socket.on('error', () => {});
 }).listen(5001, "localhost");
 
-//commands
 function onMessage(data) {
     let {text, name, channel} = data;
-    console.log("data");
 
     if (channel !== config.name) {
         return;
@@ -181,27 +177,23 @@ function onMessage(data) {
     args.splice(0,1);
 
     switch (command) {
-        case  "!help":
-            sim.say("commands: info, help");
+        case"!help":
+            sim.say("commands are: !info");
             break;
-
-            case '!info':
-                sim.say("therxyy's testing ground lolz")
-                break;
-                case '!reset':
-                    if(name==="therxyy" || "therxy" || "therx"){
-                        sim.say("server restarting... ")
-                            process.exit(1);
-                        }
-                        break;
-
-
-
-
-
-
-        }
-
+        case"!info":
+            sim.say("therxyy's testing grounds");
+            break;
+        case"!restart":
+            if(name==="therxyy")
+            {
+            sim.say("restarting...")
+            process.exit(1);
+            }
+            break;
+        case"!ping":
+            sim.say("pong");
+            break;
+    }
 
 
 }
