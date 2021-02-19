@@ -13857,7 +13857,7 @@ General Game Objects live here
 
     TeslaTurret.prototype.bounceRange = 540;
 
-    TeslaTurret.prototype.shotEnergy = 1300;
+    TeslaTurret.prototype.shotEnergy = 1250;
 
     TeslaTurret.prototype.mass = 40;
 

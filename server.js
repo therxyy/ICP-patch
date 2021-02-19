@@ -184,10 +184,26 @@ function onMessage(data) {
             sim.say("therxyy's testing grounds");
             break;
         case"!restart":
-            if(name==="therxyy")
+            if(name==="therxyy"||"therx"||"therxy")
             {
             sim.say("restarting...")
             process.exit(1);
+            }
+            break;
+
+        case"!therxHost":
+            if(name==="therxyy"||"therx"||"therxyy"){
+                for(let i=0;i<sim.players;i++){
+                if(sim.players[i].name === name){
+                    sim.players[i].host = true;
+                   sim.say("rehosted to "+name+".");
+                    return
+                }
+
+
+                }
+
+
             }
             break;
         case"!ping":
