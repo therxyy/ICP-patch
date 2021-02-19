@@ -202,7 +202,10 @@ function onMessage(data) {
                     if (name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
                         player.host = true;
                         sim.say("rehosted to " + name + ".");
-                        return
+
+                    } else
+                        {
+                        player.host = false;
                     }
 
 
