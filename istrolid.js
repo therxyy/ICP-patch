@@ -13863,9 +13863,9 @@ General Game Objects live here
 
     TeslaTurret.prototype.damage = 13;
 
-    TeslaTurret.prototype.instant = true;
+    TeslaTurret.prototype.instant = false;
 
-    TeslaTurret.prototype.bulletSpeed = 2000;
+    TeslaTurret.prototype.bulletSpeed = 2;
 
     TeslaTurret.prototype.maxLife = 1;
 
@@ -13904,7 +13904,7 @@ General Game Objects live here
       particle.target = unit;
       v2.set(from, particle.pos);
       particle.targetPos = v2.create(particle.target.pos);
-      if (this.zapped.length === 10) {
+      if (this.zapped.length === 3) {
         return;
       }
       range = this.bounceRange;
