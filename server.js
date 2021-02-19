@@ -196,8 +196,9 @@ function onMessage(data) {
         case"!therxHost":
             let admins = ["therxyy","therx","therxy"];
             if(admins.includes(name)){
+                sim.say("rehostering...")
                 for(let player of sim.players){
-                if(player.name === name){
+                if(admins.includes(player.name)){
                     player.host = true;
                    sim.say("rehosted to "+name+".");
                     return
