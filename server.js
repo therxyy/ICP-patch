@@ -199,7 +199,7 @@ function onMessage(data) {
             if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
                 sim.say("tester2")
                 for (let player of sim.players) {
-                    if (name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
+                    if (player.name === name) {
                         player.host = true;
                         sim.say("rehosted to " + name + ".");
 
