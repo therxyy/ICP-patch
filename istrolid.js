@@ -13857,7 +13857,7 @@ General Game Objects live here
 
     TeslaTurret.prototype.bounceRange = 540;
 
-    TeslaTurret.prototype.shotEnergy = 1600;
+    TeslaTurret.prototype.shotEnergy = 1300;
 
     TeslaTurret.prototype.mass = 40;
 
@@ -13904,7 +13904,7 @@ General Game Objects live here
       particle.target = unit;
       v2.set(from, particle.pos);
       particle.targetPos = v2.create(particle.target.pos);
-      if (this.zapped.length === 6) {
+      if (this.zapped.length === 8) {
         return;
       }
       range = this.bounceRange;
