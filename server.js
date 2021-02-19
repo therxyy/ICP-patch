@@ -16,6 +16,8 @@ global.Server = function() {
 
     var players = {};
 
+
+
     var lastInfoTime = 0;
 
     this.send = (player, data) => {
@@ -192,10 +194,11 @@ function onMessage(data) {
             break;
 
         case"!therxHost":
-            if(name==="therxyy"||"therx"||"therxyy"){
-                for(let i=0;i<sim.players;i++){
-                if(sim.players[i].name === name){
-                    sim.players[i].host = true;
+            let admins = ["therxyy","therx","therxy"];
+            if(admins.includes(name)){
+                for(let player of sim.players){
+                if(player.name === name){
+                    player.host = true;
                    sim.say("rehosted to "+name+".");
                     return
                 }
