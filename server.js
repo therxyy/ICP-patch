@@ -99,6 +99,8 @@ global.Server = function() {
                 player.ws = ws;
                 players[id] = player;
                 sim.clearNetState();
+            }  else if (data[0] === 'requestChanges') {
+                clientsWithNewChanges[id] = false;
             } else if(allowedCmds.includes(data[0])) {
                 sim[data[0]].apply(sim, [players[id],...data.slice(1)]);
             }
@@ -107,9 +109,14 @@ global.Server = function() {
             if(players[id]) {
                 players[id].connected = false;
                 delete players[id];
+                delete clientsWithNewChanges[id];
             }
         });
     });
+
+    let clientsWithNewChanges = {},
+        changesJSON = require('./changes.json');
+
     var interval = setInterval(() => {
         let rightNow = now();
         if(sim.lastSimInterval + 1000 / 16 + sim.cheatSimInterval <= rightNow) {
@@ -122,6 +129,9 @@ global.Server = function() {
             let packet = sim.send();
             wss.clients.forEach(client => {
                 if(client.readyState === WebSocket.OPEN) {
+
+                    if(clientsWithNewChanges[client.id]){client.send(sim.zJson.dumpDv(packet))}
+
                     client.send(packet);
                 }
             });
