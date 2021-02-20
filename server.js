@@ -132,7 +132,8 @@ global.Server = function() {
 
                     if(clientsWithNewChanges[client.id]){client.send(sim.zJson.dumpDv(packet))}
                     else {
-                        client.send(sim.zJson.dumpDv({...packet, changes: changesJSON}));
+                        client.send(packet);
+                        client.send(sim.zJson.dumpDv({changes: changesJSON}));
                         clientsWithNewChanges[client.id] = true;
                     }
                 }
