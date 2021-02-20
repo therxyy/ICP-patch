@@ -13027,11 +13027,11 @@ General Game Objects live here
 
     FlackTurret.prototype.bulletCls = types.FlackBullet;
 
-    FlackTurret.prototype.range = 460;
+    FlackTurret.prototype.range = 480;
 
     FlackTurret.prototype.mass = 30;
 
-    FlackTurret.prototype.shotEnergy = 50 * 32;
+    FlackTurret.prototype.shotEnergy = 1400;
 
     FlackTurret.prototype.exactRange = true;
 
@@ -13861,7 +13861,7 @@ General Game Objects live here
 
     TeslaTurret.prototype.mass = 40;
 
-    TeslaTurret.prototype.damage = 13;
+    TeslaTurret.prototype.damage = 3;
 
     TeslaTurret.prototype.instant = true;
 
@@ -13879,7 +13879,7 @@ General Game Objects live here
       for (i = 0, len = ref.length; i < len; i++) {
         id = ref[i];
         unit = sim.things[id];
-        results.push(unit.applyDamage(this.damage/6));
+        results.push(unit.applyDamage(this.damage));
       }
       return results;
     };

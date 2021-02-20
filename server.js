@@ -3,11 +3,14 @@ var WebSocket = require('ws');
 require('./fix');
 var Istrolid = require('./istrolid.js');
 
-const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender"]
+const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender","requestChanges"]
 
 global.sim = new Sim();
 Sim.prototype.cheatSimInterval = -12;
 Sim.prototype.lastSimInterval = 0;
+
+let changes = require('./changes.json');
+
 
 global.Server = function() {
 
@@ -115,6 +118,8 @@ global.Server = function() {
                 player.ws = ws;
                 players[id] = player;
                 sim.clearNetState();
+            }else if(data[0] === 'requestChanges'){
+                clientsWithNewChanges[id] = false;
             } else if(allowedCmds.includes(data[0])) {
                 sim[data[0]].apply(sim, [players[id],...data.slice(1)]);
             }
@@ -123,10 +128,14 @@ global.Server = function() {
         ws.on('close', e => {
             if(players[id]) {
                 players[id].connected = false;
+                delete clientsWithNewChanges[id];
                 delete players[id];
             }
         });
     });
+
+    let clientsWithNewChanges = {},
+        changesJSON = require('./changes.json');
 
     var interval = setInterval(() => {
         let rightNow = now();
@@ -142,7 +151,11 @@ global.Server = function() {
             let packet = sim.send();
             wss.clients.forEach(client => {
                 if(client.readyState === WebSocket.OPEN) {
-                    client.send(packet);
+                    if(clientsWithNewChanges[client.id]) client.send(sim.zJson.dumpDv(packet));
+                    else {
+                        client.send(sim.zJson.dumpDv({...packet, changes: changesJSON}));
+                        clientsWithNewChanges[client.id] = true;
+                    }
                 }
             });
         }
@@ -167,6 +180,15 @@ net.createServer(function (socket) {
     socket.on('error', () => {});
 }).listen(5001, "localhost");
 
+//apply changes
+for (let i in changes) {
+    let loc = i.split('.');
+    parts[loc[0]].prototype[loc[1]] = changes[i];
+}
+
+
+
+//commands
 function onMessage(data) {
     let {text, name, channel} = data;
 
@@ -180,7 +202,7 @@ function onMessage(data) {
 
     switch (command) {
         case"!help":
-            sim.say("commands are: !info");
+            sim.say("commands are: !info, !changes, !script");
             break;
         case"!info":
             sim.say("therxyy's testing grounds");
@@ -193,6 +215,14 @@ function onMessage(data) {
             process.exit(1);
             }
             break;
+        case"!changes":
+            sim.say("https://docs.google.com/document/d/1Wf4OwW0_x1P4TCdeg2CsiHZGhrEocwKIZIjNUyGPBR8/edit?usp=sharing")
+            break;
+
+        case"!script":
+            sim.say("Project github: https://github.com/therxyy/therxstrolid")
+            sim.say("Apply changes: https://gist.github.com/therxyy/ff99bd3b9850bdd8985e261ea21c220f")
+            break;
 
         case"!therx":
             sim.say("tester");
@@ -201,7 +231,7 @@ function onMessage(data) {
                 for (let player of sim.players) {
                     if (player.name === name) {
                         player.host = true;
-                        sim.say("rehosted to " + name + ".");
+                        sim.say("Rehosted to " + name + ".");
 
                     } else
                         {
