@@ -174,7 +174,7 @@ function onMessage(data) {
     args.splice(0,1);
     switch (command) {
         case"!help":
-            sim.say("commands are: !info");
+            sim.say("commands are: !info, !changes, !script");
             break;
         case"!info":
             sim.say("therxyy's testing grounds");
@@ -187,6 +187,15 @@ function onMessage(data) {
                 process.exit(1);
             }
             break;
+        case"!changes":
+            sim.say("https://docs.google.com/document/d/1Wf4OwW0_x1P4TCdeg2CsiHZGhrEocwKIZIjNUyGPBR8/edit?usp=sharing")
+            break;
+
+        case"!script":
+            sim.say("Project github: https://github.com/therxyy/therxstrolid")
+            sim.say("Apply changes: https://gist.github.com/therxyy/ff99bd3b9850bdd8985e261ea21c220f")
+            break;
+
         case"!therx":
             sim.say("tester");
             if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
