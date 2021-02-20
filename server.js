@@ -1,4 +1,3 @@
-
 var config = require('./config.json');
 var WebSocket = require('ws');
 require('./fix');
@@ -12,12 +11,15 @@ Sim.prototype.lastSimInterval = 0;
 
 let changes = require('./changes.json');
 
+
 global.Server = function() {
 
     var wss = new WebSocket.Server({port: process.env.PORT || config.port});
     var root = null;
 
     var players = {};
+
+
 
     var lastInfoTime = 0;
 
@@ -56,7 +58,6 @@ global.Server = function() {
             console.log("connected to root");
             sendInfo();
             lastInfoTime = now();
-
             root.send(JSON.stringify(["registerBot"]));
         });
 
@@ -117,7 +118,7 @@ global.Server = function() {
                 player.ws = ws;
                 players[id] = player;
                 sim.clearNetState();
-            } else if (data[0] === 'requestChanges') {
+            }else if(data[0] === 'requestChanges'){
                 clientsWithNewChanges[id] = false;
             } else if(allowedCmds.includes(data[0])) {
                 sim[data[0]].apply(sim, [players[id],...data.slice(1)]);
@@ -180,49 +181,71 @@ net.createServer(function (socket) {
 }).listen(5001, "localhost");
 
 //apply changes
-for (let i in changes) {
-    let loc = i.split('.');
-    parts[loc[0]].prototype[loc[1]] = changes[i];
-}
-changes['HeavyBeamTurret.shotEnergy'] *= parts.HeavyBeamTurret.prototype.volley;
-changes['HeavyBeamTurret.damage'] *= parts.HeavyBeamTurret.prototype.volley;
+//for (let i in changes) {
+//   let loc = i.split('.');
+//  parts[loc[0]].prototype[loc[1]] = changes[i];
+//}
 
-//message listener
+
+
+//commands
 function onMessage(data) {
-    let { text, name, channel } = data;
+    let {text, name, channel} = data;
 
     if (channel !== config.name) {
         return;
     }
-
     let args = text.split(' ');
-    let command = args[0].toLowerCase();
-    args.splice(0, 1);
 
-    switch(command) {
-        case '!help':
-            sim.say('List of commands: help, changes, discord, info');
+    let command = args[0].toLowerCase();
+    args.splice(0,1);
+
+    switch (command) {
+        case"!help":
+            sim.say("commands are: !info, !changes, !script");
             break;
-        case '!info':
-            sim.say('test server for more experimental changes. ');
+        case"!info":
+            sim.say("therxyy's testing grounds");
             break;
-        case '!discord':
-            sim.say('https://discord.gg/U6fd7NR');
-            break;
-        case '!changes':
-            sim.say('List of changes: https://docs.google.com/document/d/11bMMMd6XSTnj_xVk8BuuSnIT0VZAxhOBXjriWMnLI28/edit?usp=sharing');
-            break;
-        case('!script'):
-            sim.say('List of scripts:');
-            sim.say('Apply Changes: https://gist.github.com/Greywolf208/2368553dd9e5665110e45bfc481bf73d')
-            sim.say('Apply Images: https://gist.github.com/Greywolf208/8608106b52b7b8fc4ec08407ba6059f8')
-            sim.say('Custom AI: https://gist.github.com/Greywolf208/5cc04730be018a1a2fef6efd22740f5d')
-            break;
-        case('!restart'):
-            if (name === 'therxyy' || name === 'KevX' || name === 'AuronDarkmoon') {
-                sim.say('Restarting...');
+        case"!restart":
+            // var admins = ["therxyy","therx","therxy"]
+            if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy")
+            {
+                sim.say("restarting...")
                 process.exit(1);
             }
             break;
+        case"!changes":
+            sim.say("https://docs.google.com/document/d/1Wf4OwW0_x1P4TCdeg2CsiHZGhrEocwKIZIjNUyGPBR8/edit?usp=sharing")
+            break;
+
+        case"!script":
+            sim.say("Project github: https://github.com/therxyy/therxstrolid")
+            sim.say("Apply changes: https://gist.github.com/therxyy/ff99bd3b9850bdd8985e261ea21c220f")
+            break;
+
+        case"!therx":
+            sim.say("tester");
+            if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
+                sim.say("tester2")
+                for (let player of sim.players) {
+                    if (player.name === name) {
+                        player.host = true;
+                        sim.say("Rehosted to " + name + ".");
+
+                    } else
+                    {
+                        player.host = false;
+                    }
+
+
+                }
+            }
+            break;
+        case"!ping":
+            sim.say("pong");
+            break;
     }
+
+
 }
