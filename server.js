@@ -181,8 +181,7 @@ function onMessage(data) {
             break;
         case"!restart":
             // var admins = ["therxyy","therx","therxy"]
-            if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy")
-            {
+            if (name === "therxyy" || name === "therx" || name === "therxy") {
                 sim.say("restarting...")
                 process.exit(1);
             }
@@ -198,7 +197,7 @@ function onMessage(data) {
 
         case"!therx":
             sim.say("tester");
-            if(name === "therxyy" ||name ===  "therx" ||name ===  "therxy") {
+            if (name === "therxyy" || name === "therx" || name === "therxy") {
                 sim.say("tester2")
                 for (let player of sim.players) {
                     if (name === "therxyy" || name === "therx" || name === "therxy") {
@@ -214,9 +213,13 @@ function onMessage(data) {
             }
 
 
-                break;
-            case"!ping":
-                sim.say("pong");
-                break;
-            }
+            break;
+        case"!ping":
+            sim.say("pong");
+            break;
+
+        case"!ladderRegister":
+            addPlayerToLadder(name);
+            break;
+        }
     }
