@@ -130,10 +130,9 @@ global.Server = function() {
             wss.clients.forEach(client => {
                 if(client.readyState === WebSocket.OPEN) {
 
-                    if(clientsWithNewChanges[client.id]){client.send(sim.zJson.dumpDv(packet))}
+                    if(clientsWithNewChanges[client.id]){client.send(packet)}
                     else {
-                        client.send(packet);
-                        client.send(sim.zJson.dumpDv({changes: changesJSON}));
+                        client.send(sim.zJson.dumpDv({...packet, changes: changesJSON}));
                         clientsWithNewChanges[client.id] = true;
                     }
                 }
