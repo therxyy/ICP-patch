@@ -3,7 +3,7 @@ var WebSocket = require('ws');
 require('./fix');
 var Istrolid = require('./istrolid.js');
 
-const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender","requestChanges"]
+const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender", "requestChanges"]
 
 global.sim = new Sim();
 Sim.prototype.cheatSimInterval = -10;
