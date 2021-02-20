@@ -131,8 +131,10 @@ global.Server = function() {
                 if(client.readyState === WebSocket.OPEN) {
 
                     if(clientsWithNewChanges[client.id]){client.send(sim.zJson.dumpDv(packet))}
-
-                    client.send(packet);
+                    else {
+                        client.send(sim.zJson.dumpDv({...packet, changes: changesJSON}));
+                        clientsWithNewChanges[client.id] = true;
+                    }
                 }
             });
         }
