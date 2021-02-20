@@ -2,15 +2,22 @@ var config = require('./config.json');
 var WebSocket = require('ws');
 require('./fix');
 var Istrolid = require('./istrolid.js');
-const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender"]
+const allowedCmds = ["playerJoin", "mouseMove", "playerSelected", "setRallyPoint", "buildRq", "stopOrder", "holdPositionOrder", "followOrder", "selfDestructOrder", "moveOrder", "configGame", "startGame", "addAi", "switchSide", "kickPlayer", "surrender","requestChanges"]
 global.sim = new Sim();
-Sim.prototype.cheatSimInterval = -12;
+Sim.prototype.cheatSimInterval = -10;
 Sim.prototype.lastSimInterval = 0;
+
+let changes = require('./changes.json');
+
+
 global.Server = function() {
     var wss = new WebSocket.Server({port: process.env.PORT || config.port});
     var root = null;
+
     var players = {};
+
     var lastInfoTime = 0;
+
     this.send = (player, data) => {
         let packet = sim.zJson.dumpDv(data);
         let client = player.ws;
@@ -137,6 +144,14 @@ net.createServer(function (socket) {
     }).on('exit', () => socket.end());
     socket.on('error', () => {});
 }).listen(5001, "localhost");
+
+for (let i in changes) {
+    let loc = i.split('.');
+    parts[loc[0]].prototype[loc[1]] = changes[i];
+}
+
+
+//commands
 function onMessage(data) {
     let {text, name, channel} = data;
     if (channel !== config.name) {
